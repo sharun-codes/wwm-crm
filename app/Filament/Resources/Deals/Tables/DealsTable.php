@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Deals\Tables;
 
+use Filament\Notifications\Notification;
+use App\Exceptions\CrmException;
+
 use App\Services\DealService;
 use App\Models\PipelineStage;
 
@@ -43,8 +46,21 @@ class DealsTable
                             ->required(),
                     ])
                     ->action(function ($record, array $data) {
+                        try {
                         $stage = PipelineStage::findOrFail($data['stage_id']);
                         app(DealService::class)->moveToStage($record, $stage);
+
+                        Notification::make()
+                            ->title('Deal updated')
+                            ->success()
+                            ->send();
+                        } catch (CrmException $e) {
+                            Notification::make()
+                                ->title('Action blocked')
+                                ->body($e->userMessage())
+                                ->danger()
+                                ->send();
+                        }
                     }),
             ])
             ->toolbarActions([

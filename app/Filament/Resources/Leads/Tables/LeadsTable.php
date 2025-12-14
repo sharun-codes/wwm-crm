@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Leads\Tables;
 
+use Filament\Notifications\Notification;
+use App\Exceptions\CrmException;
+
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\Action;
@@ -39,9 +42,22 @@ class LeadsTable
                     ->modalDescription('Are you sure this lead is qualified?')
                     ->modalSubmitActionLabel('Yes, Confirm')
                     ->action(function ($record) {
-                        $pipeline = Pipeline::where('slug', 'sales')->firstOrFail();
-                        app(LeadService::class)->qualify($record, $pipeline);
-                        \Log::debug("success");
+                        try {
+                            $pipeline = Pipeline::where('slug', 'sales')->firstOrFail();
+                            app(LeadService::class)->qualify($record, $pipeline);
+                        
+                            Notification::make()
+                            ->title('Lead marked as Qualified')
+                            ->success()
+                            ->send();
+
+                        } catch (CrmException $e) {
+                            Notification::make()
+                                ->title('Action blocked')
+                                ->body($e->userMessage())
+                                ->danger()
+                                ->send();
+                        }
                     }),
             ])
             ->toolbarActions([

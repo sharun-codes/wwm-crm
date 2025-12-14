@@ -1,6 +1,9 @@
 <?php 
 namespace App\Services;
 
+use App\Exceptions\InvalidStageTransition;
+use App\Exceptions\DealValueRequired;
+
 use App\Models\Deal;
 use App\Models\PipelineStage;
 use App\Events\DealWon;
@@ -11,11 +14,11 @@ class DealService
     public function moveToStage(Deal $deal, PipelineStage $stage): void
     {
         if ($stage->pipeline_id !== $deal->pipeline_id) {
-            throw new \DomainException('Stage does not belong to this pipeline.');
+            throw new InvalidStageTransition();
         }
 
         if ($stage->is_won && empty($deal->value)) {
-            throw new \DomainException('Deal value required before marking as won.');
+            throw new DealValueRequired();
         }
 
         $deal->update([
