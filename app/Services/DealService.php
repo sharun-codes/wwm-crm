@@ -1,6 +1,7 @@
 <?php 
 namespace App\Services;
 
+use App\Domain\CRM\Rules\SalesPipelineRules;
 use App\Exceptions\InvalidStageTransition;
 use App\Exceptions\DealValueRequired;
 
@@ -11,14 +12,22 @@ use App\Events\DealLost;
 
 class DealService
 {
+    protected function rulesForPipeline(string $slug): array
+    {
+        return match ($slug) {
+            'sales' => [new SalesPipelineRules()],
+            default => [],
+        };
+    }
+
     public function moveToStage(Deal $deal, PipelineStage $stage): void
     {
         if ($stage->pipeline_id !== $deal->pipeline_id) {
             throw new InvalidStageTransition();
         }
 
-        if ($stage->is_won && empty($deal->value)) {
-            throw new DealValueRequired();
+        foreach ($this->rulesForPipeline($deal->pipeline->slug) as $rule) {
+            $rule->validate($deal, $stage);
         }
 
         $deal->update([

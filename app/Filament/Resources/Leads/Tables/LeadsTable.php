@@ -14,8 +14,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Support\Icons\Heroicon;
 
-use App\Services\LeadService;
+use App\Services\LeadService; 
 use App\Models\Pipeline;
+use App\Models\Activity;
 
 class LeadsTable
 {
@@ -52,6 +53,15 @@ class LeadsTable
                             ->send();
 
                         } catch (CrmException $e) {
+
+                            Activity::create([
+                                'subject_type' => Deal::class,
+                                'subject_id' => $record->id,
+                                'user_id' => auth()->id(),
+                                'type' => 'stage_blocked',
+                                'message' => $e->userMessage(),
+                            ]);
+
                             Notification::make()
                                 ->title('Action blocked')
                                 ->body($e->userMessage())
