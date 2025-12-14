@@ -53,7 +53,7 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
-                \Filament\Http\Middleware\Authenticate::class,
+                Authenticate::class,
             ]);
     }
 }
