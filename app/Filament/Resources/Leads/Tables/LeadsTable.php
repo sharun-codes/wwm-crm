@@ -55,7 +55,7 @@ class LeadsTable
                         } catch (CrmException $e) {
 
                             Activity::create([
-                                'subject_type' => Deal::class,
+                                'subject_type' => Lead::class,
                                 'subject_id' => $record->id,
                                 'user_id' => auth()->id(),
                                 'type' => 'stage_blocked',

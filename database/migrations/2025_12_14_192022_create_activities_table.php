@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->morphs('subject_type'); // Lead, Deal, Client
-            $table->integer('subject_id');
+            $table->morphs('subject'); // Lead, Deal, Client
             $table->foreignId('user_id')->nullable();
             $table->string('type'); // stage_blocked, stage_moved, note
             $table->text('message')->nullable();

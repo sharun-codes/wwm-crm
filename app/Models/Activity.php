@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Activity extends Model
 {
     protected $fillable = [
-        'subject',
+        'subject_type',
+        'subject_id',
         'user_id',
         'type',
         'message',

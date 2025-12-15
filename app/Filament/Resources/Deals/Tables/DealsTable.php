@@ -7,6 +7,7 @@ use App\Exceptions\CrmException;
 
 use App\Services\DealService;
 use App\Models\PipelineStage;
+use App\Models\Activity;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -55,6 +56,15 @@ class DealsTable
                             ->success()
                             ->send();
                         } catch (CrmException $e) {
+
+                            Activity::create([
+                                'subject_type' => Deal::class,
+                                'subject_id' => $record->id,
+                                'user_id' => auth()->id(),
+                                'type' => 'stage_blocked',
+                                'message' => $e->userMessage(),
+                            ]);
+
                             Notification::make()
                                 ->title('Action blocked')
                                 ->body($e->userMessage())
