@@ -29,4 +29,14 @@ class Deal extends Model
     {
         return $this->belongsTo(PipelineStage::class, 'pipeline_stage_id');
     }
+
+    public function salesDetails()
+    {
+        return $this->hasOne(SalesDealDetail::class);
+    }
+
+    public function renewalDetails()
+    {
+        return $this->hasOne(RenewalDealDetail::class);
+    }
 }

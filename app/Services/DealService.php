@@ -42,4 +42,18 @@ class DealService
             event(new DealLost($deal));
         }
     }
+
+    public function updateDetails(Deal $deal, array $data): void
+    {
+        match ($deal->pipeline->slug) {
+            'sales' => $deal->salesDetails()
+                ->updateOrCreate([], $data['sales'] ?? []),
+
+            'renewal' => $deal->renewalDetails()
+                ->updateOrCreate([], $data['renewal'] ?? []),
+
+            default => null,
+        };
+    }
+
 }
