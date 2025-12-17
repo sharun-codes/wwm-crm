@@ -52,9 +52,10 @@ class DealsTable
                         app(DealService::class)->moveToStage($record, $stage);
 
                         Notification::make()
-                            ->title('Deal updated')
+                            ->title('Stage updated')
                             ->success()
                             ->send();
+                            
                         } catch (CrmException $e) {
 
                             Activity::create([

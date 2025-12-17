@@ -1,7 +1,9 @@
 <?php 
 namespace App\Services;
 
-use App\Domain\CRM\Rules\SalesPipelineRules;
+use App\Domain\CRM\Rules\Stages\ProposalStageRule;
+use App\Domain\CRM\Rules\Stages\NegotiationStageRule;
+use App\Domain\CRM\Rules\Stages\WonStageRule;
 use App\Exceptions\InvalidStageTransition;
 use App\Exceptions\DealValueRequired;
 
@@ -15,7 +17,11 @@ class DealService
     protected function rulesForPipeline(string $slug): array
     {
         return match ($slug) {
-            'sales' => [new SalesPipelineRules()],
+            'sales' => [
+                new ProposalStageRule(),
+                new NegotiationStageRule(),
+                new WonStageRule(),
+            ],
             default => [],
         };
     }

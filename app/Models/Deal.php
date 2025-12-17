@@ -39,4 +39,14 @@ class Deal extends Model
     {
         return $this->hasOne(RenewalDealDetail::class);
     }
+
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
+
+    public function activities()
+    {
+        return $this->morphMany(Activity::class, 'subject');
+    }
 }
