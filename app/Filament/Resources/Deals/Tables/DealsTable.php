@@ -25,6 +25,11 @@ class DealsTable
         return $table
             ->columns([
                 TextColumn::make('lead.name')->label('Lead'),
+                TextColumn::make('client.name')
+                    ->label('Client')
+                    ->placeholder('—')
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('pipeline.name'),
                 TextColumn::make('stage.name')->badge(),
                 TextColumn::make('value')->money('INR'),

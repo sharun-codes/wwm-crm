@@ -8,6 +8,7 @@ class Deal extends Model
 {
     protected $fillable = [
         'lead_id',
+        'client_id',
         'pipeline_id',
         'pipeline_stage_id',
         'value',
@@ -49,4 +50,10 @@ class Deal extends Model
     {
         return $this->morphMany(Activity::class, 'subject');
     }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
 }

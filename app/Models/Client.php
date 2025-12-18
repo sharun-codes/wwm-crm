@@ -12,4 +12,9 @@ class Client extends Model
         'phone',
     ];
 
+    public function deals()
+    {
+        return $this->hasMany(Deal::class);
+    }
+
 }
