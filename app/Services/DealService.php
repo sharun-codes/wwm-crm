@@ -53,10 +53,10 @@ class DealService
     {
         match ($deal->pipeline->slug) {
             'sales' => $deal->salesDetails()
-                ->updateOrCreate([], $data['sales'] ?? []),
+                ->updateOrCreate([], $data),
 
             'renewal' => $deal->renewalDetails()
-                ->updateOrCreate([], $data['renewal'] ?? []),
+                ->updateOrCreate([], $data),
 
             default => null,
         };

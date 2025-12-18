@@ -12,4 +12,9 @@ class Attachment extends Model
         'path',
         'type',
     ];
+
+    public function attachable()
+    {
+        return $this->morphTo();
+    }
 }
