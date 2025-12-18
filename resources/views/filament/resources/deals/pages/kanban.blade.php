@@ -94,22 +94,32 @@
                                 :class="isDragging ? 'opacity-50 scale-95' : ''"
                             >
                                 <!-- Deal Header -->
+                                @php
+                                    $companyName =
+                                        $deal->lead?->company
+                                        ?? $deal->client?->company
+                                        ?? null;
+
+                                    $displayName = $deal->lead?->name
+                                        ?? $deal->client?->name
+                                        ?? 'Unknown';
+                                @endphp
                                 <div class="flex items-start justify-between mb-3">
                                     <div class="flex-1 min-w-0">
                                         <h4 class="font-semibold text-gray-900 dark:text-white text-sm leading-tight mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                                            {{ $deal->lead->name }}
+                                            {{ $displayName }}
                                         </h4>
-                                        @if($deal->lead->company)
+                                        @if($companyName)
                                             <p class="text-xs text-gray-500 dark:text-gray-400 flex items-center">
                                                 <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"/>
                                                 </svg>
-                                                {{ $deal->lead->company }}
+                                                {{ $companyName }}
                                             </p>
                                         @endif
                                     </div>
                                     
-                                    @if($deal->lead->probability)
+                                    @if($deal->lead?->probability)
                                         @php
                                             $probabilityColors = [
                                                 'early' => 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
@@ -135,7 +145,7 @@
                                         </span>
                                     </div>
 
-                                    @if($deal->lead->urgency)
+                                    @if($deal->lead?->urgency)
                                         @php
                                             $urgencyColors = [
                                                 'low' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
@@ -144,15 +154,15 @@
                                             ];
                                         @endphp
                                         <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded {{ $urgencyColors[$deal->lead->urgency] ?? 'bg-gray-100 text-gray-700' }}">
-                                            {{ ucfirst($deal->lead->urgency) }}
+                                            {{ ucfirst($deal->lead?->urgency) }}
                                         </span>
                                     @endif
                                 </div>
 
                                 <!-- Additional Info -->
-                                @if($deal->lead->category || $deal->lead->timeline)
+                                @if($deal->lead?->category || $deal->lead?->timeline)
                                     <div class="flex flex-wrap gap-1 mt-3">
-                                        @if($deal->lead->category)
+                                        @if($deal->lead?->category)
                                             <span class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                                                 {{ $deal->lead->category }}
                                             </span>

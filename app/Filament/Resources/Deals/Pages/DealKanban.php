@@ -34,7 +34,7 @@ class DealKanban extends Page
 
     public function getDealsByStageProperty()
     {
-        return Deal::with('lead')
+        return Deal::with('lead', 'client')
             ->where('pipeline_id', $this->pipelineId)
             ->get()
             ->groupBy('pipeline_stage_id');

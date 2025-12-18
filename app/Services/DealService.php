@@ -7,7 +7,9 @@ use App\Domain\CRM\Rules\Stages\WonStageRule;
 use App\Exceptions\InvalidStageTransition;
 use App\Exceptions\DealValueRequired;
 
+use App\Models\Client;
 use App\Models\Deal;
+use App\Models\Pipeline;
 use App\Models\PipelineStage;
 use App\Events\DealWon;
 use App\Events\DealLost;
@@ -60,6 +62,24 @@ class DealService
 
             default => null,
         };
+    }
+
+    public function createFromClient(
+        Client $client,
+        Pipeline $pipeline,
+        array $dealData = []
+    ): Deal {
+        $firstStage = PipelineStage::where('pipeline_id', $pipeline->id)
+            ->orderBy('sort_order')
+            ->firstOrFail();
+    
+        return Deal::create([
+            'client_id' => $client->id,
+            'pipeline_id' => $pipeline->id,
+            'pipeline_stage_id' => $firstStage->id,
+            'owner_id' => auth()->id(),
+            ...$dealData,
+        ]);
     }
 
 }
