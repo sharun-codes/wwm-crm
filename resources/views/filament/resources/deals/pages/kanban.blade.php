@@ -30,8 +30,8 @@
     <!-- Pipeline Stages -->
     <div class="overflow-x-auto pb-4 -mx-6 px-6">
         <div
-            class="min-w-max grid gap-4"
-            style="grid-template-columns: repeat({{ $this->stages->count() }}, minmax(20rem, 1fr));"
+            class="min-w-max grid gap-2"
+            style="grid-template-columns: repeat({{ $this->stages->count() }}, minmax(15rem, 1fr));"
         >
             @foreach($this->stages as $stage)
                 <div
@@ -96,12 +96,14 @@
                                 <!-- Deal Header -->
                                 @php
                                     $companyName =
-                                        $deal->lead?->company
+                                        $deal->company?->name 
                                         ?? $deal->client?->company
                                         ?? null;
 
-                                    $displayName = $deal->lead?->name
-                                        ?? $deal->client?->name
+                                    $displayName = 
+                                    $deal->client?->name
+                                        ?? $deal->company?->name  
+                                        ?? $deal->lead?->name
                                         ?? 'Unknown';
                                 @endphp
                                 <div class="flex items-start justify-between mb-3">
