@@ -75,6 +75,7 @@ class DealService
     
         return Deal::create([
             'client_id' => $client->id,
+            'company_id' => $client->company_id,
             'pipeline_id' => $pipeline->id,
             'pipeline_stage_id' => $firstStage->id,
             'owner_id' => auth()->id(),

@@ -20,7 +20,7 @@ class DealResource extends Resource
 {
     protected static ?string $model = Deal::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::HandThumbUp;
 
     public static function form(Schema $schema): Schema
     {

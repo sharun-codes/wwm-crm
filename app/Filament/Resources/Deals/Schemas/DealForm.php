@@ -36,9 +36,16 @@ class DealForm
                 ->required(),
 
             Select::make('client_id')
-            ->relationship('client', 'name')
-            ->disabled()
-            ->visible(fn ($record) => filled($record?->client_id)),
+                ->relationship('client', 'name')
+                ->disabled()
+                ->visible(fn ($record) => filled($record?->client_id)),
+            Select::make('company_id')
+                ->relationship('company', 'name')
+                ->searchable()
+                ->preload()
+                ->disabled()
+                ->visible(fn ($record) => filled($record?->company_id))
+                ->label('Company'),
         ]),
         // Dynamic fields block
         Section::make()

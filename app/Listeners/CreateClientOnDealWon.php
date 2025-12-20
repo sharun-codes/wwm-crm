@@ -24,27 +24,26 @@ class CreateClientOnDealWon
     {
         $deal = $event->deal;
 
-        // Find or create client (email = identity)
+         // Resolve or create Company
+         $company = Company::firstOrCreate(
+            ['name' => $deal->lead?->company ?? $deal->client?->company ?? $deal->lead?->name],
+        );
+
+        // Resolve or create Client (contact)
         $client = Client::firstOrCreate(
+            ['email' => $deal->lead?->email ?? $deal->client?->email],
             [
-                'email' => $deal->lead->email ?? 'phone:' . $deal->lead->phone,
-            ],
-            [
-                'name' => $deal->lead->name,
-                'phone' => $deal->lead->phone,
+                'name' => $deal->lead?->name ?? $deal->client?->name,
+                'phone' => $deal->lead?->phone ?? $deal->client?->phone,
+                'company_id' => $company->id,
             ]
         );
 
-        \Log::warning("deal won");
-        \Log::debug($deal);
-        \Log::debug($client);
-        \Log::warning("--------");
+        //Link Deal -> Client + Company (idempotent)
+        $deal->update([
+            'client_id' => $client->id,
+            'company_id' => $company->id,
+        ]);
 
-        // Link deal to client (idempotent)
-        if ($deal->client_id !== $client->id) {
-            $deal->update([
-                'client_id' => $client->id,
-            ]);
-        }
     }
 }
