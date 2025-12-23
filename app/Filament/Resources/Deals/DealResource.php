@@ -9,6 +9,7 @@ use App\Filament\Resources\Deals\Pages\DealKanban;
 use App\Filament\Resources\Deals\Schemas\DealForm;
 use App\Filament\Resources\Deals\Tables\DealsTable;
 use App\Filament\Resources\Deals\RelationManagers\AttachmentsRelationManager;
+use App\Filament\Resources\Deals\RelationManagers\ActivitiesRelationManager;
 use App\Models\Deal;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -35,6 +36,7 @@ class DealResource extends Resource
     public static function getRelations(): array
     {
         return [
+            ActivitiesRelationManager::class,
             AttachmentsRelationManager::class,
         ];
     }

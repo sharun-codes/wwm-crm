@@ -7,6 +7,7 @@ use App\Filament\Resources\Leads\Pages\EditLead;
 use App\Filament\Resources\Leads\Pages\ListLeads;
 use App\Filament\Resources\Leads\Schemas\LeadForm;
 use App\Filament\Resources\Leads\Tables\LeadsTable;
+use App\Filament\Resources\Leads\RelationManagers\ActivitiesRelationManager;
 use App\Models\Lead;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -39,7 +40,7 @@ class LeadResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ActivitiesRelationManager::class,
         ];
     }
 

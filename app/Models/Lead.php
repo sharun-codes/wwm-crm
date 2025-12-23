@@ -15,4 +15,9 @@ class Lead extends Model
         'assigned_to',
         'notes',
     ];
+
+    public function activities()
+    {
+        return $this->morphMany(Activity::class, 'subject');
+    }
 }
