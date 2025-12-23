@@ -6,6 +6,7 @@ use App\Events\DealWon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\Client;
+use App\Models\Company;
 
 class CreateClientOnDealWon
 {

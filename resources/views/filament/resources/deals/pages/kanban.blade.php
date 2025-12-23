@@ -28,10 +28,10 @@
     </div>
 
     <!-- Pipeline Stages -->
-    <div class="overflow-x-auto pb-4 -mx-6 px-6">
+    <div class="overflow-x-auto pb-2 -mx-4 px-4">
         <div
             class="min-w-max grid gap-2"
-            style="grid-template-columns: repeat({{ $this->stages->count() }}, minmax(15rem, 1fr));"
+            style="grid-template-columns: repeat({{ $this->stages->count() }}, minmax(14rem, 1fr));"
         >
             @foreach($this->stages as $stage)
                 <div
