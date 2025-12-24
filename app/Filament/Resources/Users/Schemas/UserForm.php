@@ -31,9 +31,9 @@ class UserForm
 
                 TextInput::make('password')
                     ->password()
-                    ->dehydrateStateUsing(fn ($state) => filled($state) ? bcrypt($state) : null)
-                    ->required(fn (string $context) => $context === 'create')
-                    ->hiddenOn('view'),
+                    ->required()
+                    ->dehydrateStateUsing(fn ($state) => bcrypt($state))
+                    ->visible(fn (string $context) => $context === 'create'),
 
                 Select::make('roles')
                     ->label('Roles')
