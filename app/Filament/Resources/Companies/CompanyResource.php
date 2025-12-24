@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyResource extends Resource
 {
@@ -24,10 +25,30 @@ class CompanyResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'company';
 
-    // public static function canViewAny(): bool
-    // {
-    //     return auth()->user()->can('companies.view');
-    // }
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->can('companies.view') ?? false;
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Auth::user()->can('companies.view');
+    }
+
+    public static function canCreate(): bool
+    {
+        return Auth::user()->can('companies.create');
+    }
+
+    public static function canEdit($record): bool
+    {
+        return Auth::user()->can('companies.update');
+    }
+
+    public static function canDelete($record): bool
+    {
+        return Auth::user()->can('companies.delete');
+    }
 
     public static function form(Schema $schema): Schema
     {

@@ -9,6 +9,11 @@ class RevenueSnapshotWidget extends Widget
 {
     protected string $view = 'filament.widgets.revenue-snapshot-widget';
 
+    public static function canView(): bool
+    {
+        return auth()->user()->can('deals.view');
+    }
+
     public function getViewData(): array
     {
         return [

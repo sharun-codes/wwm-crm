@@ -46,6 +46,14 @@ class LeadsTable
                         try {
                             $pipeline = Pipeline::where('slug', 'sales')->firstOrFail();
                             app(LeadService::class)->qualify($record, $pipeline);
+
+                            Activity::create([
+                                'subject_type' => Lead::class,
+                                'subject_id' => $record->id,
+                                'user_id' => auth()->id(),
+                                'type' => 'lead_qualified',
+                                'message' => $e->userMessage(),
+                            ]);
                         
                             Notification::make()
                             ->title('Lead marked as Qualified')

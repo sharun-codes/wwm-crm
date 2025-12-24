@@ -15,6 +15,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class LeadResource extends Resource
 {
@@ -22,9 +23,29 @@ class LeadResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ChevronDoubleRight;
 
-    public static function canDelete(Model $record): bool
+    public static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()->hasRole('super-admin');
+        return auth()->user()?->can('leads.view') ?? false;
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Auth::user()->can('leads.view');
+    }
+
+    public static function canCreate(): bool
+    {
+        return Auth::user()->can('leads.create');
+    }
+
+    public static function canEdit($record): bool
+    {
+        return Auth::user()->can('leads.update');
+    }
+
+    public static function canDelete($record): bool
+    {
+        return Auth::user()->can('leads.delete');
     }
 
     public static function form(Schema $schema): Schema

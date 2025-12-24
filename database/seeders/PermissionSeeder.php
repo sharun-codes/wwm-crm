@@ -19,23 +19,65 @@ class PermissionSeeder extends Seeder
             ->forgetCachedPermissions();
 
         $permissions = [
+            // Leads
             'leads.view',
             'leads.create',
-            'leads.assign',
-            'leads.convert',
+            'leads.update',
+            'leads.assign', //assign = assign lead to user
+            'leads.delete',
+            'leads.convert', //convert = qualify -> deal
 
+            // Deals
             'deals.view',
+            'deals.create',
             'deals.update',
-            'deals.move_stage',
-            'deals.view_value',
+            'deals.delete',
+            'deals.move_stage', //move_stage = Kanban drag & drop
+            'deals.view_value', //view_value = hide revenue for some roles
 
+            // Pipelines
+            'pipelines.view',
+            'pipelines.manage', //Manage = create/update stages, order, rules
+
+            // Clients
             'clients.view',
             'clients.create',
+            'clients.update',
+            'clients.delete',
 
+            // Companies
             'companies.view',
             'companies.create',
+            'companies.update',
+            'companies.delete',
 
+            // Activities
+            'activities.view',
+            'activities.create',
+            'activities.delete',
+
+             // Attachments
+            'attachments.view',
             'attachments.upload',
+            'attachments.delete',
+
+
+            // Dashboard & Reports
+            'dashboard.view',
+            'reports.view',
+            'reports.export',
+
+             // Users
+            'users.view',
+            'users.create',
+            'users.update',
+            'users.delete',
+            'users.assign_roles',
+            'users.reset_password',
+
+            // System
+            'audit.view',
+            'settings.manage',
         ];
 
         foreach ($permissions as $permission) {
@@ -53,29 +95,74 @@ class PermissionSeeder extends Seeder
         $superAdmin->syncPermissions(Permission::all());
 
         // Manager: everything
-        $manager->syncPermissions($permissions);
+        $manager->syncPermissions([
+            'dashboard.view',
+            'reports.view',
+            'reports.export',
 
-        // Staff: operational access
-        $staff->syncPermissions([
             'leads.view',
             'leads.create',
+            'leads.update',
             'leads.assign',
             'leads.convert',
 
             'deals.view',
+            'deals.create',
+            'deals.update',
+            'deals.move_stage',
+            'deals.view_value',
+
+            'clients.view',
+            'clients.create',
+            'clients.update',
+
+            'companies.view',
+            'companies.create',
+            'companies.update',
+
+            'activities.view',
+            'activities.create',
+
+            'attachments.view',
+            'attachments.upload',
+
+            'pipelines.view',
+        ]);
+
+        // Staff: operational access
+        $staff->syncPermissions([
+            'dashboard.view',
+
+            'leads.view',
+            'leads.create',
+            'leads.update',
+
+            'deals.view',
+            'deals.create',
             'deals.update',
             'deals.move_stage',
 
             'clients.view',
             'clients.create',
 
+            'companies.view',
+
+            'activities.view',
+            'activities.create',
+
+            'attachments.view',
             'attachments.upload',
         ]);
 
         // Freelancer: limited intake
         $freelancer->syncPermissions([
+            'dashboard.view',
+
             'leads.view',
             'leads.create',
+            
+            'activities.view',
+            'activities.create',
         ]);
     }
 }

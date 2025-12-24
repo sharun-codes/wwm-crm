@@ -22,6 +22,11 @@ class DealKanban extends Page
 
     public function mount(): void
     {
+        abort_unless(
+            auth()->user()->can('deals.view'),
+            403
+        );
+
         $this->pipelineId ??= Pipeline::where('slug', 'sales')->value('id');
     }
 
@@ -34,7 +39,7 @@ class DealKanban extends Page
 
     public function getDealsByStageProperty()
     {
-        return Deal::with('lead.company', 'client.company')
+        return Deal::with('lead', 'client')
             ->where('pipeline_id', $this->pipelineId)
             ->get()
             ->groupBy('pipeline_stage_id');
@@ -42,6 +47,11 @@ class DealKanban extends Page
 
     public function moveDeal(int $dealId, int $stageId): void
     {
+        abort_unless(
+            auth()->user()->can('deals.move_stage'),
+            403
+        );
+    
         try {
             $deal = Deal::findOrFail($dealId);
             $stage = PipelineStage::findOrFail($stageId);

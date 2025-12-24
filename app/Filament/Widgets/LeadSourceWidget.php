@@ -9,6 +9,11 @@ class LeadSourceWidget extends Widget
 {
     protected string $view = 'filament.widgets.lead-source-widget';
 
+    public static function canView(): bool
+    {
+        return auth()->user()->can('deals.view');
+    }
+
     public function getViewData(): array
     {
         return [

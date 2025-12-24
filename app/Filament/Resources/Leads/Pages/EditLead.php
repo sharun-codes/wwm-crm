@@ -15,7 +15,7 @@ class EditLead extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('logActivity')
+            Action::make('logActivity')->visible(fn () => auth()->user()->can('activities.create'))
                 ->label('Log Activity')
                 ->icon('heroicon-o-plus')
                 ->modalHeading('Log Activity')
@@ -44,7 +44,7 @@ class EditLead extends EditRecord
                     ]);
                 })
                 ->successNotificationTitle('Activity logged'),
-            DeleteAction::make(),
+            DeleteAction::make()->visible(fn () => auth()->user()->can('leads.delete')),
         ];
     }
 }

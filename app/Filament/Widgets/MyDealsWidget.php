@@ -11,6 +11,11 @@ class MyDealsWidget extends Widget
 
     protected int|string|array $columnSpan = 'full';
 
+    public static function canView(): bool
+    {
+        return auth()->user()->can('deals.view');
+    }
+
     public function getViewData(): array
     {
         return [
