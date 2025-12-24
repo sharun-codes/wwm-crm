@@ -46,7 +46,7 @@ class EditDeal extends EditRecord
                     ]);
                 })
                 ->successNotificationTitle('Activity logged'),
-            DeleteAction::make()->visible(fn () => auth()->user()->can('deal.delete')),
+            DeleteAction::make()->visible(fn () => auth()->user()->can('deals.delete')),
         ];
     }
 

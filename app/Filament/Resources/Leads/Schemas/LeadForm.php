@@ -24,9 +24,17 @@ class LeadForm
                 TextInput::make('phone'),
                 Select::make('source')
                     ->options([
+                        'direct' => 'Direct',
+                        'email' => 'Email',
+                        'phone' => 'Phone',
+                        'existing_customer' => 'Existing Customer',
+                        'campaign' => 'Campaign',
+                        'web' => 'Web',
                         'website' => 'Website',
                         'freelancer' => 'Freelancer',
                         'agency' => 'Agency',
+                        'referral' => 'Referral',
+                        'other' => 'Other',
                     ])
                     ->required(),
                 Select::make('status')

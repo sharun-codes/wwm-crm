@@ -77,7 +77,7 @@
 
                     <!-- Deals Container -->
                     <div 
-                        class="flex-1 space-y-3 min-h-[200px] rounded-lg p-2 transition-all duration-200"
+                        class="flex-1 space-y-3 min-h-50 rounded-lg p-2 transition-all duration-200"
                         :class="isDraggingOver ? 'bg-primary-50 dark:bg-primary-900/10' : 'bg-transparent'"
                     >
                         @forelse($this->dealsByStage[$stage->id] ?? [] as $deal)
@@ -95,16 +95,17 @@
                             >
                                 <!-- Deal Header -->
                                 @php
-                                    $companyName =
-                                        $deal->company?->name 
-                                        ?? $deal->client?->company
-                                        ?? null;
-
                                     $displayName = 
                                     $deal->client?->name
                                         ?? $deal->company?->name  
                                         ?? $deal->lead?->name
                                         ?? 'Unknown';
+                                        
+                                    $companyName =
+                                        $deal->company?->name 
+                                        ?? $deal->client?->company
+                                        ?? null;
+
                                 @endphp
                                 <div class="flex items-start justify-between mb-3">
                                     <div class="flex-1 min-w-0">
