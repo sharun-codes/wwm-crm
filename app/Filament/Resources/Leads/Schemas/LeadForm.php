@@ -6,6 +6,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Image;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Text;
 use Filament\Support\Enums\FontWeight;
@@ -19,34 +20,43 @@ class LeadForm
     {
         return $schema
             ->components([
-                TextInput::make('name')->required(),
-                TextInput::make('email')->email(),
-                TextInput::make('phone'),
-                Select::make('source')
-                    ->options([
-                        'direct' => 'Direct',
-                        'email' => 'Email',
-                        'phone' => 'Phone',
-                        'existing_customer' => 'Existing Customer',
-                        'campaign' => 'Campaign',
-                        'web' => 'Web',
-                        'website' => 'Website',
-                        'freelancer' => 'Freelancer',
-                        'agency' => 'Agency',
-                        'referral' => 'Referral',
-                        'other' => 'Other',
-                    ])
-                    ->required(),
-                Select::make('status')
-                    ->options([
-                        'new' => 'New',
-                        'contacted' => 'Contacted',
-                        'qualified' => 'Qualified',
-                        'disqualified' => 'Disqualified',
-                    ])
-                    ->default('new')
-                    ->disabled(fn ($record) => $record?->status === 'qualified'),
-                Textarea::make('notes'),
+                Fieldset::make('Basic Info')
+                    ->schema([
+                        TextInput::make('name')->label('Title')->required(),
+                        Select::make('source')
+                            ->options([
+                                'direct' => 'Direct',
+                                'email' => 'Email',
+                                'phone' => 'Phone',
+                                'existing_customer' => 'Existing Customer',
+                                'campaign' => 'Campaign',
+                                'web' => 'Web',
+                                'website' => 'Website',
+                                'freelancer' => 'Freelancer',
+                                'agency' => 'Agency',
+                                'referral' => 'Referral',
+                                'other' => 'Other',
+                            ])
+                            ->required(),
+                        Select::make('status')
+                            ->options([
+                                'new' => 'New',
+                                'contacted' => 'Contacted',
+                                'qualified' => 'Qualified',
+                                'disqualified' => 'Disqualified',
+                            ])
+                            ->default('new')
+                            ->disabled(fn ($record) => $record?->status === 'qualified'),
+                            ]),
+                    Fieldset::make('Primary Contact')
+                        ->schema([
+                            TextInput::make('email')->label('Primary Email')->email(),
+                            TextInput::make('phone')->label('Primary Phone'),
+                        ]),
+                    Fieldset::make('Notes')
+                        ->schema([ 
+                            Textarea::make('notes'),
+                        ])
             ]);
     }
 }

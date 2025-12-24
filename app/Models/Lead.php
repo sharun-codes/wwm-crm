@@ -20,4 +20,9 @@ class Lead extends Model
     {
         return $this->morphMany(Activity::class, 'subject');
     }
+
+    public function contacts()
+    {
+        return $this->hasMany(LeadContact::class);
+    }
 }

@@ -8,6 +8,7 @@ use App\Filament\Resources\Leads\Pages\ListLeads;
 use App\Filament\Resources\Leads\Schemas\LeadForm;
 use App\Filament\Resources\Leads\Tables\LeadsTable;
 use App\Filament\Resources\Leads\RelationManagers\ActivitiesRelationManager;
+use App\Filament\Resources\Leads\RelationManagers\ContactsRelationManager;
 use App\Models\Lead;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -62,6 +63,7 @@ class LeadResource extends Resource
     {
         return [
             ActivitiesRelationManager::class,
+            ContactsRelationManager::class,
         ];
     }
 

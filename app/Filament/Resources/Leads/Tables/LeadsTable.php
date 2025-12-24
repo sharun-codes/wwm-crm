@@ -24,7 +24,7 @@ class LeadsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')->searchable(),
+                TextColumn::make('name')->label('Title')->searchable(),
                 TextColumn::make('source')->badge(),
                 TextColumn::make('status')->badge(),
                 TextColumn::make('created_at')->date(),
@@ -52,7 +52,7 @@ class LeadsTable
                                 'subject_id' => $record->id,
                                 'user_id' => auth()->id(),
                                 'type' => 'lead_qualified',
-                                'message' => $e->userMessage(),
+                                'message' => 'Lead qualified to deal',
                             ]);
                         
                             Notification::make()
