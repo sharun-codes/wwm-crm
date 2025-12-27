@@ -33,6 +33,7 @@ class DealForm
                     fn ($query, callable $get) =>
                         $query->where('pipeline_id', $get('pipeline_id'))
                 )
+                ->disabled()
                 ->required(),
 
             Select::make('client_id')

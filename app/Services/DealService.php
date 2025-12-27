@@ -6,6 +6,7 @@ use App\Domain\CRM\Rules\Stages\NegotiationStageRule;
 use App\Domain\CRM\Rules\Stages\WonStageRule;
 use App\Exceptions\InvalidStageTransition;
 use App\Exceptions\DealValueRequired;
+use App\Exceptions\DealStageBlockedException;
 
 use App\Models\Client;
 use App\Models\Deal;
@@ -28,14 +29,59 @@ class DealService
         };
     }
 
+    protected function ensurePrimaryContactExists(Deal $deal): void
+    {
+        $lead = $deal->lead;
+
+        $hasPrimary = $lead
+            ?->contacts()
+            ->where('is_primary', true)
+            ->exists();
+
+        if (! $hasPrimary) {
+            throw new MissingRequirement(
+                'A primary contact is required before marking a deal as WON.'
+            );
+        }
+    }
+
     public function moveToStage(Deal $deal, PipelineStage $stage): void
     {
         if ($stage->pipeline_id !== $deal->pipeline_id) {
             throw new InvalidStageTransition();
         }
 
-        foreach ($this->rulesForPipeline($deal->pipeline->slug) as $rule) {
-            $rule->validate($deal, $stage);
+        // foreach ($this->rulesForPipeline($deal->pipeline->slug) as $rule) {
+        //     $rule->validate($deal, $stage);
+        // }
+
+        if ($stage->slug === 'negotiation' && $deal->activities()->count() === 0) {
+            throw new DealStageBlockedException(
+                reason: 'At least one activity is required before negotiation.',
+                action: 'add_activity'
+            );
+        }
+
+        if ($stage->slug === 'won') {
+
+            if ($deal->value <= 0) {
+                throw new DealStageBlockedException(
+                    reason: 'Deal value must be greater than zero before marking as WON.',
+                    action: 'edit_value'
+                );
+            }
+
+            $hasPrimaryContact = $deal->lead
+            ->contacts()
+            ->where('is_primary', true)
+            ->exists();
+
+            if (! $hasPrimaryContact) {
+                throw new DealStageBlockedException(
+                    reason: 'A primary contact is required before marking this deal as WON.',
+                    action: 'add_contact'
+                );
+            }
         }
 
         $deal->update([

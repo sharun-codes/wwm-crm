@@ -24,7 +24,7 @@ class LeadsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Title')->searchable(),
+                TextColumn::make('name')->searchable(),
                 TextColumn::make('source')->badge(),
                 TextColumn::make('status')->badge(),
                 TextColumn::make('created_at')->date(),

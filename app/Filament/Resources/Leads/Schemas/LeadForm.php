@@ -22,7 +22,8 @@ class LeadForm
             ->components([
                 Fieldset::make('Basic Info')
                     ->schema([
-                        TextInput::make('name')->label('Title')->required(),
+                        TextInput::make('name')->label('Lead Name')
+                        ->helperText('Business or person name for this lead')->required(),
                         Select::make('source')
                             ->options([
                                 'direct' => 'Direct',

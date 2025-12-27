@@ -3,7 +3,8 @@
 namespace App\Filament\Resources\Deals\Tables;
 
 use Filament\Notifications\Notification;
-use App\Exceptions\CrmException;
+use App\Exceptions\DealStageBlockedException;
+use App\Exceptions\MissingRequirement;
 
 use App\Services\DealService;
 use App\Models\PipelineStage;
@@ -61,21 +62,36 @@ class DealsTable
                             ->success()
                             ->send();
                             
-                        } catch (CrmException $e) {
+                        } catch (DealStageBlockedException $e) {
 
                             Activity::create([
                                 'subject_type' => Deal::class,
                                 'subject_id' => $record->id,
                                 'user_id' => auth()->id(),
                                 'type' => 'stage_blocked',
-                                'message' => $e->userMessage(),
+                                'message' => $e->reason,
                             ]);
 
                             Notification::make()
                                 ->title('Action blocked')
-                                ->body($e->userMessage())
+                                ->body($e->reason)
                                 ->danger()
                                 ->send();
+
+                            match ($e->action) {
+                                'add_contact' => redirect()->to(
+                                    route('filament.admin.resources.deals.edit', [
+                                        'record' => $record->id,
+                                        'activeRelationManager' => 'contacts',
+                                    ])
+                                ),
+                    
+                                'edit_value' => redirect()->to(
+                                    route('filament.admin.resources.deals.edit', $record->id)
+                                ),
+                    
+                                default => null,
+                            };
                         }
                     }),
             ])
@@ -84,5 +100,22 @@ class DealsTable
                     DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    protected function openAddContactModalFromList(int $dealId): void
+    {
+        redirect()->to(
+            route('filament.admin.resources.deals.edit', [
+                'record' => $dealId,
+                'activeRelationManager' => 'contacts',
+            ])
+        );
+    }
+
+    protected function redirectToEditDeal(int $dealId): void
+    {
+        redirect()->to(
+            route('filament.admin.resources.deals.edit', $dealId)
+        );
     }
 }

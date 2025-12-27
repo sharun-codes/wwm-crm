@@ -236,4 +236,27 @@
             background: #6b7280;
         }
     </style>
+
+    <x-filament::modal
+        id="add-contact-modal"
+        width="lg"
+    >
+        <x-slot name="heading">
+            Add Primary Contact
+        </x-slot>
+
+        <form wire:submit.prevent="saveContact">
+            {{ $this->form }}
+
+            <div class="flex justify-end gap-2 mt-6">
+                <x-filament::button color="gray" wire:click="$set('showAddContactModal', false)">
+                    Cancel
+                </x-filament::button>
+
+                <x-filament::button type="submit">
+                    Save & Mark WON
+                </x-filament::button>
+            </div>
+        </form>
+    </x-filament::modal>
 </x-filament::page>
