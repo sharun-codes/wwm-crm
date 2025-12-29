@@ -34,4 +34,9 @@ class Client extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function contacts()
+    {
+        return $this->hasMany(LeadContact::class);
+    }
+
 }

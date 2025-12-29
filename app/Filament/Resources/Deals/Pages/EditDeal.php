@@ -46,6 +46,32 @@ class EditDeal extends EditRecord
                     ]);
                 })
                 ->successNotificationTitle('Activity logged'),
+
+            Action::make('addContact')
+                ->label('Add Contact')
+                ->icon('heroicon-o-user-plus')
+                ->modalHeading('Add Contact')
+                ->form([
+                    \Filament\Forms\Components\TextInput::make('name')->required(),
+                    \Filament\Forms\Components\TextInput::make('designation'),
+                    \Filament\Forms\Components\TextInput::make('email')->email(),
+                    \Filament\Forms\Components\TextInput::make('mobile'),
+                    \Filament\Forms\Components\Toggle::make('is_primary')
+                        ->label('Primary Contact')
+                        ->default(false),
+                ])
+                ->action(function (array $data) {
+                    $deal = $this->record;
+    
+                    // Decide where to store the contact
+                    if ($deal->client_id) {
+                        $deal->client->contacts()->create($data);
+                    } else {
+                        $deal->lead->contacts()->create($data);
+                    }
+                })
+                ->successNotificationTitle('Contact added'),
+
             DeleteAction::make()->visible(fn () => auth()->user()->can('deals.delete')),
         ];
     }
@@ -79,5 +105,13 @@ class EditDeal extends EditRecord
 
         return $data;
     }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            \App\Filament\Resources\Deals\Widgets\DealContactsWidget::class,
+        ];
+    }
+
 
 }
